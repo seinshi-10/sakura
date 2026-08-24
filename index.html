@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakura Nukus — Sushi &amp; More</title>
+<meta name="description" content="Sakura — фудтрак роллов и напитков в Нукусе. Taste the japanese mood.">
+<link rel="icon" type="image/png" href="./assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=PT+Sans:wght@400;700&family=PT+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#120d0c;
+    --bg-panel:#1a1211;
+    --red:#c8102e;
+    --red-deep:#7a0c1e;
+    --red-glow:#ff2f4f;
+    --pink:#f6aec4;
+    --pink-soft:#f9d3de;
+    --cream:#f8efe4;
+    --gold:#cf9a4c;
+    --ink:#efe4dc;
+    --ink-dim:#b8a89f;
+    --radius:18px;
+    --display:'PT Serif', serif;
+    --body:'PT Sans', sans-serif;
+    --mono:'PT Mono', monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;font-size:clamp(15px,0.94vw + 10px,18px);}
+  body{
+    background:var(--bg-deep);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  section{position:relative;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(18px,4.5vw,48px);}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:clamp(11px,1vw,13px);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--pink);
+    display:flex;align-items:center;gap:10px;
+    flex-wrap:wrap;
+  }
+  .eyebrow::before{content:'';width:22px;height:1px;background:var(--gold);display:inline-block;flex-shrink:0;}
+  h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.01em;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:clamp(12px,1.6vw,15px) clamp(20px,3vw,28px);border-radius:999px;
+    font-family:var(--body);font-weight:700;font-size:clamp(13px,1.1vw,15px);
+    letter-spacing:.02em;
+    border:1px solid transparent;
+    cursor:pointer;transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn:focus-visible{outline:2px solid var(--pink-soft);outline-offset:3px;}
+  .btn-primary{background:linear-gradient(135deg,var(--red),var(--red-deep));color:var(--cream);box-shadow:0 10px 30px -12px rgba(200,16,46,.65);}
+  .btn-ghost{border-color:rgba(239,228,220,.3);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--pink);}
+
+  /* petals */
+  .petals{position:fixed;inset:0;pointer-events:none;z-index:5;overflow:hidden;}
+  .petal{
+    position:absolute;top:-5%;
+    font-size:14px;
+    opacity:.55;
+    animation:fall linear infinite;
+    color:var(--pink);
+    filter:drop-shadow(0 0 6px rgba(246,174,196,.3));
+  }
+  @keyframes fall{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg);}
+    100%{transform:translateY(110vh) translateX(40px) rotate(340deg);}
+  }
+
+  /* nav */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(18,13,12,.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(207,154,76,.18);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:clamp(10px,1.6vw,16px) clamp(18px,4.5vw,48px);max-width:1240px;margin:0 auto;gap:16px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:clamp(18px,2vw,22px);flex-shrink:0;}
+  .brand .mark{width:clamp(28px,3vw,36px);height:clamp(28px,3vw,36px);border-radius:50%;object-fit:cover;}
+  .nav-links{display:flex;gap:clamp(16px,2.2vw,30px);font-size:clamp(13px,1vw,14.5px);font-weight:600;flex-wrap:wrap;}
+  .nav-links a{color:var(--ink-dim);transition:color .2s;white-space:nowrap;}
+  .nav-links a:hover{color:var(--pink);}
+  .nav-cta{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+  .burger{display:none;background:none;border:none;color:var(--ink);font-size:22px;cursor:pointer;}
+  @media (max-width:820px){
+    .nav-links{display:none;}
+    .burger{display:block;}
+    .nav-cta .btn-primary{padding:10px 18px;font-size:13px;}
+  }
+
+  /* hero */
+  .hero{padding:clamp(56px,10vw,120px) 0 clamp(44px,7vw,70px);position:relative;}
+  .hero-branch{position:absolute;top:clamp(-20px,-3vw,-40px);right:clamp(-30px,-4vw,-60px);width:clamp(180px,24vw,340px);opacity:.5;pointer-events:none;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(32px,6vw,64px);align-items:center;}
+  @media (max-width:840px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{font-size:clamp(38px,7.2vw,80px);line-height:1.03;color:var(--cream);}
+  .hero h1 em{font-style:normal;color:var(--red-glow);}
+  .hero p.lead{margin-top:20px;font-size:clamp(14.5px,1.6vw,17.5px);color:var(--ink-dim);max-width:460px;}
+  .hero-actions{display:flex;gap:14px;margin-top:clamp(24px,4vw,34px);flex-wrap:wrap;}
+
+  .hero-emblem{
+    position:relative;
+    width:100%;aspect-ratio:1/1;max-width:clamp(240px,32vw,420px);margin:0 auto;
+    border-radius:50%;
+    background:var(--bg-panel);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 3px var(--gold), 0 30px 80px -20px rgba(200,16,46,.6);
+  }
+  .hero-emblem img{width:94%;height:94%;border-radius:50%;object-fit:cover;}
+
+  /* section headers */
+  .sec-head{max-width:640px;margin-bottom:clamp(30px,5vw,44px);}
+  .sec-head h2{font-size:clamp(27px,4.6vw,46px);color:var(--cream);margin-top:14px;line-height:1.08;}
+  .sec-head p{color:var(--ink-dim);margin-top:12px;font-size:clamp(14px,1.4vw,15.5px);}
+
+  section.pad{padding:clamp(56px,9vw,92px) 0;}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px);}
+  @media (max-width:760px){.about-grid{grid-template-columns:1fr;}}
+  .about-card{
+    background:var(--bg-panel);border:1px solid rgba(207,154,76,.16);
+    border-radius:var(--radius);padding:clamp(22px,3vw,30px);
+  }
+  .about-card .num{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:.14em;}
+  .about-card h3{margin-top:12px;font-size:clamp(19px,2.2vw,23px);color:var(--cream);}
+  .about-card p{margin-top:10px;font-size:clamp(13.5px,1.4vw,14.5px);color:var(--ink-dim);}
+
+  /* menu */
+  .menu-toggle{display:flex;gap:10px;margin-bottom:clamp(28px,4vw,38px);flex-wrap:wrap;}
+  .menu-toggle button{
+    font-family:var(--body);font-weight:700;font-size:clamp(12.5px,1.1vw,13.5px);
+    padding:10px 20px;border-radius:999px;border:1px solid rgba(207,154,76,.3);
+    background:transparent;color:var(--ink-dim);cursor:pointer;transition:.2s;
+  }
+  .menu-toggle button.active{background:var(--red);color:var(--cream);border-color:var(--red);}
+  .menu-panels{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2.6vw,28px);}
+  @media (max-width:760px){.menu-panels{grid-template-columns:1fr;}}
+  .menu-card{
+    background:linear-gradient(180deg,var(--cream),#efe1cf);
+    color:#2a1310;
+    border-radius:var(--radius);
+    padding:clamp(20px,3vw,26px) clamp(20px,3vw,26px) 20px;
+    position:relative;
+    box-shadow:0 20px 50px -25px rgba(0,0,0,.6);
+  }
+  .menu-card::before{
+    content:'';position:absolute;inset:0;border-radius:var(--radius);
+    background-image:radial-gradient(circle, rgba(200,16,46,.05) 1px, transparent 1px);
+    background-size:14px 14px;pointer-events:none;
+  }
+  .menu-card h4{
+    font-family:var(--display);font-size:clamp(14.5px,1.3vw,16px);letter-spacing:.05em;
+    color:var(--cream);background:var(--red);
+    display:inline-block;padding:5px 16px;border-radius:8px;
+    margin-bottom:16px;transform:rotate(-1deg);
+  }
+  .menu-row{
+    display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    padding:8px 0;border-bottom:1px dotted rgba(122,12,30,.3);
+    font-size:clamp(13px,1.2vw,14.5px);
+  }
+  .menu-row:last-child{border-bottom:none;}
+  .menu-row .name{font-weight:600;}
+  .menu-row .desc{display:block;font-size:clamp(10.5px,1vw,11.5px);color:#6b453c;font-weight:400;margin-top:1px;}
+  .menu-row .price{font-family:var(--mono);font-weight:600;white-space:nowrap;color:var(--red-deep);}
+  .hidden{display:none !important;}
+
+  /* gallery */
+  .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.6vw,14px);}
+  @media (max-width:760px){.gallery{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:420px){.gallery{grid-template-columns:1fr;}}
+  .gallery figure{
+    aspect-ratio:4/5;border-radius:14px;overflow:hidden;position:relative;
+    background:linear-gradient(160deg,var(--red-deep),#3a0a12);
+    display:flex;align-items:flex-end;padding:14px;
+    border:1px solid rgba(207,154,76,.18);
+  }
+  .gallery figure span{font-size:clamp(11.5px,1.1vw,12.5px);color:var(--pink-soft);font-weight:600;}
+
+  /* delivery / contact */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,3vw,40px);}
+  @media (max-width:840px){.split{grid-template-columns:1fr;}}
+  .panel{
+    background:var(--bg-panel);border:1px solid rgba(207,154,76,.16);
+    border-radius:var(--radius);padding:clamp(24px,3.5vw,34px);
+  }
+  .panel h3{font-size:clamp(20px,2.4vw,25px);color:var(--cream);margin-bottom:18px;}
+  .info-line{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(207,154,76,.12);font-size:clamp(13.5px,1.3vw,15px);}
+  .info-line:last-child{border-bottom:none;}
+  .info-line .ico{color:var(--gold);font-family:var(--mono);flex-shrink:0;}
+  .info-line b{color:var(--ink);}
+  .tag-pill{
+    display:inline-block;font-family:var(--mono);font-size:clamp(10.5px,1vw,12px);
+    background:rgba(200,16,46,.18);color:#ff8296;border:1px solid rgba(200,16,46,.4);
+    padding:3px 10px;border-radius:999px;margin-top:14px;
+  }
+
+  /* footer */
+  footer{border-top:1px solid rgba(207,154,76,.18);padding:clamp(36px,6vw,50px) 0 clamp(24px,4vw,34px);background:var(--bg-panel);}
+  .foot-grid{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap;}
+  .foot-brand{font-family:var(--display);font-size:clamp(19px,2.2vw,23px);color:var(--cream);}
+  .foot-brand small{display:block;font-family:var(--body);font-size:12px;color:var(--ink-dim);margin-top:6px;font-weight:600;letter-spacing:.05em;}
+  .foot-links{display:flex;gap:clamp(14px,2vw,22px);font-size:13px;color:var(--ink-dim);flex-wrap:wrap;}
+  .foot-links a:hover{color:var(--pink);}
+  .foot-bottom{margin-top:34px;font-size:12px;color:#6b5d56;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+</style>
+</head>
+<body>
+
+<div class="petals" aria-hidden="true" id="petals"></div>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="#top">
+      <img class="mark" src="./assets/logo.png" alt="Sakura logo">
+      Sakura
+    </a>
+    <nav class="nav-links">
+      <a href="#menu">Меню</a>
+      <a href="#gallery">Момент</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary" href="tel:+998938425030">Заказать</a>
+      <button class="burger" aria-label="Меню">☰</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <svg class="hero-branch" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 190C60 150 90 100 190 10" stroke="#cf9a4c" stroke-width="1.5" opacity=".5"/>
+      <circle cx="60" cy="140" r="7" fill="#f6aec4" opacity=".7"/>
+      <circle cx="90" cy="110" r="5" fill="#f6aec4" opacity=".6"/>
+      <circle cx="120" cy="82" r="8" fill="#f6aec4" opacity=".8"/>
+      <circle cx="150" cy="52" r="4" fill="#f6aec4" opacity=".5"/>
+      <circle cx="170" cy="30" r="6" fill="#f6aec4" opacity=".7"/>
+    </svg>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Food Truck · Нукус · Бердақ театр</div>
+        <h1>Taste the<br><em>japanese</em> mood</h1>
+        <p class="lead">Роллы, которые запоминаются. Холод, вкус и атмосфера. Место для своих — прямо у театра Бердақ.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#menu">Смотреть меню</a>
+          <a class="btn btn-ghost" href="https://instagram.com/sakura.nukus" target="_blank" rel="noopener">@sakura.nukus</a>
+        </div>
+      </div>
+      <div class="hero-emblem">
+        <img src="./assets/logo.png" alt="Sakura panda logo">
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="pad">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">О нас</div>
+        <h2>Маленький фудтрак с большим настроением</h2>
+        <p>Sakura — это не просто роллы на вынос. Это вечер у театра, свет гирлянд и вкус, который хочется повторить.</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="num">Свежесть</div>
+          <h3>Готовим при вас</h3>
+          <p>Каждый ролл собирается на месте — рис, нори, начинка. Вы видите весь процесс через окно фудтрака.</p>
+        </div>
+        <div class="about-card">
+          <div class="num">Атмосфера</div>
+          <h3>Место для своих</h3>
+          <p>Гирлянды, лавочки у театра Бердақ и фотозона по субботам — бесплатные фото гостям каждую неделю.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="pad" id="menu">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Меню</div>
+        <h2>Роллы и напитки</h2>
+        <p>Цены в суммах. Состав указан для каждого ролла.</p>
+      </div>
+
+      <div class="menu-toggle" role="tablist" aria-label="Категории меню">
+        <button class="active" data-target="rolls">Роллы</button>
+        <button data-target="drinks">Напитки</button>
+      </div>
+
+      <div class="menu-panels" id="rolls">
+        <div class="menu-card">
+          <h4>Классика</h4>
+          <div class="menu-row"><div><span class="name">Филадельфия</span><span class="desc">творожный сыр, рис, лосось, нори</span></div><span class="price">75 000</span></div>
+          <div class="menu-row"><div><span class="name">Калифорния</span><span class="desc">творожный сыр, огурец, масаго, краб, рис, нори</span></div><span class="price">65 000</span></div>
+          <div class="menu-row"><div><span class="name">Сезар</span><span class="desc">творожный сыр, огурец, курица, рис, нори</span></div><span class="price">55 000</span></div>
+        </div>
+        <div class="menu-card">
+          <h4>Запечённые</h4>
+          <div class="menu-row"><div><span class="name">Поцелуй гейши</span><span class="desc">творожный сыр, лосось, огурец, рис, нори</span></div><span class="price">60 000</span></div>
+          <div class="menu-row"><div><span class="name">Сяки хот маки</span><span class="desc">творожный сыр, курица, огурец, рис, нори</span></div><span class="price">53 000</span></div>
+        </div>
+        <div class="menu-card">
+          <h4>Темпура</h4>
+          <div class="menu-row"><div><span class="name">Филадельфия темпура</span><span class="desc">творожный сыр, лосось, огурец, рис, нори</span></div><span class="price">63 000</span></div>
+          <div class="menu-row"><div><span class="name">Фюжин</span><span class="desc">творожный сыр, курица, рис, нори</span></div><span class="price">55 000</span></div>
+          <div class="menu-row"><div><span class="name">Краб темпура</span><span class="desc">творожный сыр, краб, масаго, рис, нори</span></div><span class="price">60 000</span></div>
+        </div>
+        <div class="menu-card">
+          <h4>Маки</h4>
+          <div class="menu-row"><div><span class="name">Тори маки</span><span class="desc">курица</span></div><span class="price">28 000</span></div>
+          <div class="menu-row"><div><span class="name">Сяки маки</span><span class="desc">лосось</span></div><span class="price">35 000</span></div>
+          <div class="menu-row"><div><span class="name">Кани маки</span><span class="desc">краб</span></div><span class="price">30 000</span></div>
+          <div class="menu-row"><div><span class="name">Капа маки</span><span class="desc">огурец</span></div><span class="price">25 000</span></div>
+        </div>
+      </div>
+
+      <div class="menu-panels hidden" id="drinks">
+        <div class="menu-card">
+          <h4>Чай</h4>
+          <div class="menu-row"><span class="name">С лимоном чёрный / зелёный</span><span class="price">15 000</span></div>
+          <div class="menu-row"><span class="name">Чай зелёный / чёрный</span><span class="price">12 000</span></div>
+          <div class="menu-row"><span class="name">Фруктовый</span><span class="price">20 000</span></div>
+          <div class="menu-row"><span class="name">Малиновый</span><span class="price">20 000</span></div>
+          <div class="menu-row"><span class="name">Ташкентский</span><span class="price">20 000</span></div>
+          <div class="menu-row"><span class="name">Марокканский</span><span class="price">20 000</span></div>
+          <div class="menu-row"><span class="name">Имбирный</span><span class="price">20 000</span></div>
+        </div>
+        <div class="menu-card">
+          <h4>С тапиокой</h4>
+          <div class="menu-row"><span class="name">Классик</span><span class="price">40 000</span></div>
+          <div class="menu-row"><span class="name">Клубника банан</span><span class="price">40 000</span></div>
+          <div class="menu-row"><span class="name">Клубника манго</span><span class="price">40 000</span></div>
+          <div class="menu-row"><span class="name">Какао банан</span><span class="price">45 000</span></div>
+          <h4 style="margin-top:20px;">Фруктовый чай</h4>
+          <div class="menu-row"><span class="name">Клубника грейпфрут</span><span class="price">35 000</span></div>
+          <div class="menu-row"><span class="name">Манго маракуйя</span><span class="price">35 000</span></div>
+          <div class="menu-row"><span class="name">Сакура персик</span><span class="price">35 000</span></div>
+          <div class="menu-row"><span class="name">Арбуз виноград</span><span class="price">35 000</span></div>
+        </div>
+        <div class="menu-card">
+          <h4>Мохито</h4>
+          <div class="menu-row"><span class="name">Классический</span><span class="price">20 000</span></div>
+          <div class="menu-row"><span class="name">Клубничный</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Малиновый</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Арбузный</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Манго маракуйя</span><span class="price">25 000</span></div>
+        </div>
+        <div class="menu-card">
+          <h4>Милкшейк</h4>
+          <div class="menu-row"><span class="name">Сливочный</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Банановый</span><span class="price">30 000</span></div>
+          <div class="menu-row"><span class="name">Клубничный</span><span class="price">30 000</span></div>
+          <div class="menu-row"><span class="name">Ванильный</span><span class="price">30 000</span></div>
+          <div class="menu-row"><span class="name">Шоколадный</span><span class="price">30 000</span></div>
+          <div class="menu-row"><span class="name">Карамельный</span><span class="price">30 000</span></div>
+          <div class="menu-row"><span class="name">Сникерс</span><span class="price">30 000</span></div>
+          <div class="menu-row"><span class="name">Орео</span><span class="price">30 000</span></div>
+        </div>
+        <div class="menu-card">
+          <h4>Лонг дринкс</h4>
+          <div class="menu-row"><span class="name">Пинк флойд</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Пина колада</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Айс ти</span><span class="price">25 000</span></div>
+        </div>
+        <div class="menu-card">
+          <h4>Лимонады</h4>
+          <div class="menu-row"><span class="name">Клубничный</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Малиновый</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Апельсиновый</span><span class="price">25 000</span></div>
+          <div class="menu-row"><span class="name">Тархун</span><span class="price">25 000</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="pad" id="gallery">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">#otziv</div>
+        <h2>Момент из фудтрака</h2>
+        <p>Каждую субботу — бесплатные фото для наших гостей. Ваш вечер, ваша история.</p>
+      </div>
+      <div class="gallery">
+        <figure><span>Sizin' tan'lawin'iz</span></figure>
+        <figure><span>Готовим при вас</span></figure>
+        <figure><span>Вечер у театра</span></figure>
+        <figure><span>Хорошая новость для гостей</span></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- DELIVERY / CONTACT -->
+  <section class="pad" id="delivery">
+    <div class="wrap split">
+      <div class="panel">
+        <h3>Доставка</h3>
+        <div class="info-line"><span class="ico">⏱</span><span>Ежедневно с <b>12:00</b> до <b>00:00</b></span></div>
+        <div class="info-line"><span class="ico">₮</span><span>Внутри города — <b>5 000 сум</b></span></div>
+        <div class="info-line"><span class="ico">↝</span><span>Г. завод, Орак Балга — <b>10 000 сум</b></span></div>
+        <span class="tag-pill">Сиз жақсы көретин суши енди жақын</span>
+      </div>
+      <div class="panel" id="contact">
+        <h3>Контакты</h3>
+        <div class="info-line"><span class="ico">☏</span><span><b>+998 (93) 842-50-30</b></span></div>
+        <div class="info-line"><span class="ico">⚑</span><span>Нукус, у театра <b>Бердақ</b></span></div>
+        <div class="info-line"><span class="ico">◎</span><span>Instagram — <b>@sakura.nukus</b></span></div>
+        <div class="hero-actions" style="margin-top:20px;">
+          <a class="btn btn-primary" href="tel:+998938425030">Позвонить</a>
+          <a class="btn btn-ghost" href="https://instagram.com/sakura.nukus" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">Sakura<small>Sushi &amp; more · Нукус</small></div>
+      <div class="foot-links">
+        <a href="#menu">Меню</a>
+        <a href="#delivery">Доставка</a>
+        <a href="#contact">Контакты</a>
+        <a href="https://instagram.com/sakura.nukus" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Sakura Nukus</span>
+      <span>Taste the japanese mood 🌸</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // menu tab toggle
+  document.querySelectorAll('.menu-toggle button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.menu-toggle button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('rolls').classList.toggle('hidden', btn.dataset.target!=='rolls');
+      document.getElementById('drinks').classList.toggle('hidden', btn.dataset.target!=='drinks');
+    });
+  });
+
+  // falling petals, respects reduced motion
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const layer = document.getElementById('petals');
+    for(let i=0;i<14;i++){
+      const p = document.createElement('span');
+      p.className='petal';
+      p.textContent='✿';
+      p.style.left = Math.random()*100+'vw';
+      p.style.fontSize = (10+Math.random()*10)+'px';
+      p.style.animationDuration = (14+Math.random()*14)+'s';
+      p.style.animationDelay = (Math.random()*14)+'s';
+      layer.appendChild(p);
+    }
+  }
+
+  // mobile burger -> simple in-page jump menu
+  document.querySelector('.burger')?.addEventListener('click',()=>{
+    document.querySelector('.nav-links').style.display='flex';
+    document.querySelector('.nav-links').style.flexDirection='column';
+    document.querySelector('.nav-links').style.position='absolute';
+    document.querySelector('.nav-links').style.top='60px';
+    document.querySelector('.nav-links').style.right='24px';
+    document.querySelector('.nav-links').style.background='var(--bg-panel)';
+    document.querySelector('.nav-links').style.padding='18px 24px';
+    document.querySelector('.nav-links').style.borderRadius='14px';
+    document.querySelector('.nav-links').style.border='1px solid rgba(207,154,76,.25)';
+  });
+</script>
+</body>
+</html>
